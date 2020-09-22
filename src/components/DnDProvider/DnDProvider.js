@@ -72,12 +72,12 @@ class DnDProvider extends Component {
 
         if (!avatar) {
             // элемент нажат, но пока не начали его двигать
-            // if (
-            //     Math.abs(event.pageX - downX) < 3
-            //     && Math.abs(event.pageY - downY) < 3
-            // ) {
-            //     return;
-            // }
+            if (
+                Math.abs(event.pageX - downX) < 3
+                && Math.abs(event.pageY - downY) < 3
+            ) {
+                return;
+            }
             // попробовать захватить элемент
             avatar = dragZone.onDragStart(downX, downY, event);
 
@@ -108,7 +108,7 @@ class DnDProvider extends Component {
         // dropTarget = newDropTarget;
         this.setState({dropTarget: newDropTarget});
         // TODO optimize this function
-        if (dropTarget && dropTarget.droppable) {
+        if (dropTarget) {
             if (typeof onDragMove === 'function') {
                 onDragMove(event, null, dropTarget);
             }
