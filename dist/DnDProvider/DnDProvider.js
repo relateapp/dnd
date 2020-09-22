@@ -104,9 +104,12 @@ var DnDProvider = function (_Component) {
 
             if (!avatar) {
                 // элемент нажат, но пока не начали его двигать
-                if (Math.abs(event.pageX - downX) < 3 && Math.abs(event.pageY - downY) < 3) {
-                    return;
-                }
+                // if (
+                //     Math.abs(event.pageX - downX) < 3
+                //     && Math.abs(event.pageY - downY) < 3
+                // ) {
+                //     return;
+                // }
                 // попробовать захватить элемент
                 avatar = dragZone.onDragStart(downX, downY, event);
 
