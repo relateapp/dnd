@@ -1,0 +1,24 @@
+.draggable {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+.droppable.hover {
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.droppable.above {
+    border-top: 1px solid red;
+}
+
+.droppable.under {
+    border-bottom: 1px solid red;
+}
+
+.droppable.middle {
+    background: lightgray;
+}
