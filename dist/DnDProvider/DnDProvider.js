@@ -138,7 +138,10 @@ var DnDProvider = function (_Component) {
             this.setState({ dropTarget: newDropTarget });
             // TODO optimize this function
             if (dropTarget && dropTarget.droppable) {
-                onDragMove(event, null, dropTarget);
+                if (typeof onDragMove === 'function') {
+                    onDragMove(event, null, dropTarget);
+                }
+
                 dropTarget.onDragMove(avatar, event);
             }
 
@@ -234,6 +237,6 @@ var DnDProvider = function (_Component) {
 
 DnDProvider.propTypes = {
     onDragEnd: _propTypes2.default.func.isRequired,
-    onDragMove: _propTypes2.default.func.isRequired
+    onDragMove: _propTypes2.default.func
 };
 exports.default = DnDProvider;

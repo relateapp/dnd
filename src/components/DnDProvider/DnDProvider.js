@@ -5,7 +5,7 @@ class DnDProvider extends Component {
 
     static propTypes = {
         onDragEnd:    PropTypes.func.isRequired,
-        onDragMove:   PropTypes.func.isRequired
+        onDragMove:   PropTypes.func
     };
 
     constructor(props) {
@@ -109,7 +109,10 @@ class DnDProvider extends Component {
         this.setState({dropTarget: newDropTarget});
         // TODO optimize this function
         if (dropTarget && dropTarget.droppable) {
-            onDragMove(event, null, dropTarget);
+            if (typeof onDragMove === 'function') {
+                onDragMove(event, null, dropTarget);
+            }
+
             dropTarget.onDragMove(avatar, event);
         }
 
