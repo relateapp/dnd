@@ -11,8 +11,8 @@ const App = () => {
     };
 
     const onDragMove = (event, draggable, droppable) => {
-        console.log('event ->', event);
-        console.log('droppable ->', droppable);
+        console.log('move ->');
+        // console.log('droppable ->', droppable);
         // console.log('droppableId ->', droppableId);
     };
 

@@ -44,7 +44,7 @@ class dropTargetConnector {
             } else if (clientY > under) {
                 dropTarget.removeIndicationClass(['above', 'middle']);
                 dropTarget.addIndicationClass('under');
-                dropTarget.dropPosition = 'under';
+                dropTarget. dropPosition = 'under';
             } else if (clientY > above && clientY < under) {
                 dropTarget.removeIndicationClass(['above', 'under']);
                 dropTarget.addIndicationClass('middle');
@@ -59,12 +59,12 @@ class Node extends Component {
         super(props);
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.dropTargetElement !== this.props.dropTargetElement) {
-            console.log('RECIVED new dragZoneElement', this.props.dragZoneElement);
-            console.log('RECIVED new dropTargetElement', this.props.dropTargetElement);
-        }
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    //     if (prevProps.dropTargetElement !== this.props.dropTargetElement) {
+    //         console.log('RECIVED new dragZoneElement', this.props.dragZoneElement);
+    //         console.log('RECIVED new dropTargetElement', this.props.dropTargetElement);
+    //     }
+    // }
 
     setRef = elem => {
         this.props.setDraggableRef(elem);
@@ -88,6 +88,7 @@ class Node extends Component {
                         node.textContent
                             ?
                             <span
+                                style={{ height: '30px', display: 'block' }}
                                 // className={node.attributes.class}
                                 // data-node-id={node.id}
                             >

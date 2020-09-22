@@ -73,8 +73,8 @@ class DnDProvider extends Component {
         if (!avatar) {
             // элемент нажат, но пока не начали его двигать
             if (
-                Math.abs(event.pageX - downX) < 3
-                && Math.abs(event.pageY - downY) < 3
+                Math.abs(event.pageX - downX) < 2
+                && Math.abs(event.pageY - downY) < 2
             ) {
                 return;
             }
