@@ -30,74 +30,37 @@ var DnDProvider = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (DnDProvider.__proto__ || Object.getPrototypeOf(DnDProvider)).call(this, props));
 
-        _this.state = {
-            dragZone: null,
-            dropTarget: null,
-            avatar: null,
-            downX: 0,
-            downY: 0
-        };
-
-        _this.onDragStart = _this.onDragStart.bind(_this);
-        _this.onMouseMove = _this.onMouseMove.bind(_this);
-        _this.onMouseUp = _this.onMouseUp.bind(_this);
-        _this.onMouseDown = _this.onMouseDown.bind(_this);
-        return _this;
-    }
-
-    _createClass(DnDProvider, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            document.addEventListener('dragstart', this.onDragStart);
-            document.addEventListener('mousemove', this.onMouseMove);
-            document.addEventListener('mouseup', this.onMouseUp);
-            document.addEventListener('mousedown', this.onMouseDown);
-        }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            document.removeEventListener('dragstart', this.onDragStart);
-            document.removeEventListener('mousemove', this.onMouseMove);
-            document.removeEventListener('mouseup', this.onMouseUp);
-            document.removeEventListener('mousedown', this.onMouseDown);
-        }
-    }, {
-        key: 'onDragStart',
-        value: function onDragStart() {
-            return false;
-        }
-    }, {
-        key: 'onMouseDown',
-        value: function onMouseDown(e) {
+        _this.onMouseDown = function (e) {
             if (e.which !== 1) {
                 // не левой кнопкой
                 return;
             }
 
-            var dragZone = this.findDragZone(e);
+            var dragZone = _this.findDragZone(e);
 
             if (!dragZone) {
                 return;
             } else {
-                this.setState({ dragZone: dragZone });
+                _this.setState({ dragZone: dragZone });
             }
 
             // запомним, что элемент нажат на текущих координатах pageX/pageY
-            this.setState({
+            _this.setState({
                 downX: e.pageX,
                 downY: e.pageY
             });
-        }
-    }, {
-        key: 'onMouseMove',
-        value: function onMouseMove(event) {
-            var onDragMove = this.props.onDragMove;
-            var _state = this.state,
-                dragZone = _state.dragZone,
-                downX = _state.downX,
-                downY = _state.downY,
-                avatar = _state.avatar,
-                dropTarget = _state.dropTarget;
+        };
+
+        _this.onMouseMove = function (event) {
+            var _this$props = _this.props,
+                onDragMove = _this$props.onDragMove,
+                onDragStart = _this$props.onDragStart;
+            var _this$state = _this.state,
+                dragZone = _this$state.dragZone,
+                downX = _this$state.downX,
+                downY = _this$state.downY,
+                avatar = _this$state.avatar,
+                dropTarget = _this$state.dropTarget;
 
 
             if (!dragZone) return; // элемент не зажат
@@ -107,17 +70,21 @@ var DnDProvider = function (_Component) {
                 if (Math.abs(event.pageX - downX) < 3 && Math.abs(event.pageY - downY) < 3) {
                     return;
                 }
+
+                if (typeof onDragStart === 'function') {
+                    onDragStart(event);
+                }
                 // попробовать захватить элемент
                 avatar = dragZone.onDragStart(downX, downY, event);
 
                 if (!avatar) {
                     // не получилось, значит перенос продолжать нельзя
-                    this.cleanUp(); // очистить приватные переменные, связанные с переносом
+                    _this.cleanUp(); // очистить приватные переменные, связанные с переносом
                 } else {
-                    this.setState({ avatar: avatar });
+                    _this.setState({ avatar: avatar });
                 }
 
-                return this;
+                return _this;
             }
 
             // отобразить перенос объекта, перевычислить текущий элемент под курсором
@@ -126,7 +93,7 @@ var DnDProvider = function (_Component) {
             // найти новый dropTarget под курсором: newDropTarget
             // текущий dropTarget остался от прошлого mousemove
             // *оба значения: и newDropTarget и dropTarget могут быть null
-            var newDropTarget = this.findDropTarget(event);
+            var newDropTarget = _this.findDropTarget(event);
 
             if (newDropTarget !== dropTarget) {
                 // уведомить старую и новую зоны-цели о том, что с них ушли/на них зашли
@@ -135,7 +102,7 @@ var DnDProvider = function (_Component) {
             }
 
             // dropTarget = newDropTarget;
-            this.setState({ dropTarget: newDropTarget });
+            _this.setState({ dropTarget: newDropTarget });
             // TODO optimize this function
             if (dropTarget) {
                 if (typeof onDragMove === 'function') {
@@ -146,15 +113,14 @@ var DnDProvider = function (_Component) {
             }
 
             return false;
-        }
-    }, {
-        key: 'onMouseUp',
-        value: function onMouseUp(event) {
-            var onDragEnd = this.props.onDragEnd;
-            var _state2 = this.state,
-                avatar = _state2.avatar,
-                dragZone = _state2.dragZone,
-                dropTarget = _state2.dropTarget;
+        };
+
+        _this.onMouseUp = function (event) {
+            var onDragEnd = _this.props.onDragEnd;
+            var _this$state2 = _this.state,
+                avatar = _this$state2.avatar,
+                dragZone = _this$state2.dragZone,
+                dropTarget = _this$state2.dropTarget;
 
 
             if (event.which !== 1) {
@@ -182,7 +148,32 @@ var DnDProvider = function (_Component) {
                 }
             }
 
-            this.cleanUp();
+            _this.cleanUp();
+        };
+
+        _this.state = {
+            dragZone: null,
+            dropTarget: null,
+            avatar: null,
+            downX: 0,
+            downY: 0
+        };
+        return _this;
+    }
+
+    _createClass(DnDProvider, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            document.addEventListener('mousemove', this.onMouseMove);
+            document.addEventListener('mouseup', this.onMouseUp);
+            document.addEventListener('mousedown', this.onMouseDown);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            document.removeEventListener('mousemove', this.onMouseMove);
+            document.removeEventListener('mouseup', this.onMouseUp);
+            document.removeEventListener('mousedown', this.onMouseDown);
         }
     }, {
         key: 'cleanUp',

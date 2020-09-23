@@ -18,32 +18,21 @@ class DnDProvider extends Component {
             downX:      0,
             downY:      0
         };
-
-        this.onDragStart = this.onDragStart.bind(this);
-        this.onMouseMove = this.onMouseMove.bind(this);
-        this.onMouseUp = this.onMouseUp.bind(this);
-        this.onMouseDown = this.onMouseDown.bind(this);
     }
 
     componentDidMount() {
-        document.addEventListener('dragstart', this.onDragStart);
         document.addEventListener('mousemove', this.onMouseMove);
         document.addEventListener('mouseup', this.onMouseUp);
         document.addEventListener('mousedown', this.onMouseDown);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('dragstart', this.onDragStart);
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('mouseup', this.onMouseUp);
         document.removeEventListener('mousedown', this.onMouseDown);
     }
 
-    onDragStart() {
-        return false;
-    }
-
-    onMouseDown(e) {
+    onMouseDown = (e) => {
         if (e.which !== 1) {
             // не левой кнопкой
             return;
@@ -64,8 +53,8 @@ class DnDProvider extends Component {
         });
     }
 
-    onMouseMove(event) {
-        const { onDragMove } = this.props;
+    onMouseMove = event => {
+        const { onDragMove, onDragStart } = this.props;
         let {dragZone, downX, downY, avatar, dropTarget} = this.state;
 
         if (!dragZone) return; // элемент не зажат
@@ -77,6 +66,10 @@ class DnDProvider extends Component {
                 && Math.abs(event.pageY - downY) < 3
             ) {
                 return;
+            }
+
+            if (typeof onDragStart === 'function') {
+                onDragStart(event);
             }
             // попробовать захватить элемент
             avatar = dragZone.onDragStart(downX, downY, event);
@@ -119,7 +112,7 @@ class DnDProvider extends Component {
         return false;
     }
 
-    onMouseUp(event) {
+    onMouseUp = (event) => {
         const {onDragEnd} = this.props;
         const {avatar, dragZone, dropTarget} = this.state;
 

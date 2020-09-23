@@ -11,14 +11,18 @@ const App = () => {
     };
 
     const onDragMove = (event, draggable, droppable) => {
-        console.log('move ->');
-        // console.log('droppable ->', droppable);
+        console.log('droppable ->', droppable);
         // console.log('droppableId ->', droppableId);
     };
+
+    const onDragStart = event => {
+        console.log(event);
+    }
 
     return (
         <div id="app">
             <DnDProvider
+                onDragStart={onDragStart}
                 onDragEnd={onDragEnd}
                 onDragMove={onDragMove}
             >
