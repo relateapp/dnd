@@ -78,17 +78,17 @@ class Node extends Component {
         return (
             <React.Fragment>
                 <Tag
-                    className="draggable droppable"
-                    data-draggable-id={node.id}
-                    data-droppable-id={node.id}
-                    ref={this.setRef}
                     key={node.id}
                 >
                     {
                         node.textContent
                             ?
                             <span
-                                style={{ height: '30px', display: 'block' }}
+                                ref={this.setRef}
+                                className="draggable droppable"
+                                data-draggable-id={node.id}
+                                data-droppable-id={node.id}
+                                style={{ height: '30px', display: 'block', border: '1px solid black' }}
                                 // className={node.attributes.class}
                                 // data-node-id={node.id}
                             >

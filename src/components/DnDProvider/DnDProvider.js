@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { getDraggableId, getDroppableId } from '../utils';
 
 class DnDProvider extends Component {
 
@@ -102,17 +103,17 @@ class DnDProvider extends Component {
         this.setState({dropTarget: newDropTarget});
         // TODO optimize this function
         if (dropTarget) {
+            dropTarget.onDragMove(avatar, event);
+
             if (typeof onDragMove === 'function') {
                 onDragMove(event, null, dropTarget);
             }
-
-            dropTarget.onDragMove(avatar, event);
         }
 
         return false;
     }
 
-    onMouseUp = (event) => {
+    onMouseUp = event => {
         const {onDragEnd} = this.props;
         const {avatar, dragZone, dropTarget} = this.state;
 
@@ -129,18 +130,14 @@ class DnDProvider extends Component {
                 dropTarget.onDragEnd(avatar, event);
 
                 if (typeof onDragEnd === 'function') {
+                    const draggableId = getDraggableId(dragZone.draggable);
+
                     if (dropTarget.droppable) {
-                        const draggableId = dragZone
-                            .draggable
-                            .closest('.draggable')
-                            .dataset
-                            .draggableId;
-                        const droppableId = dropTarget
-                            .droppable
-                            .closest('.droppable')
-                            .dataset.droppableId;
+                        const droppableId = getDroppableId(dropTarget.droppable);
 
                         onDragEnd(event, draggableId, droppableId);
+                    } else {
+                        onDragEnd(event, draggableId, null);
                     }
                 }
             } else {

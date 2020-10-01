@@ -14,6 +14,8 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _utils = require('../utils');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -105,11 +107,11 @@ var DnDProvider = function (_Component) {
             _this.setState({ dropTarget: newDropTarget });
             // TODO optimize this function
             if (dropTarget) {
+                dropTarget.onDragMove(avatar, event);
+
                 if (typeof onDragMove === 'function') {
                     onDragMove(event, null, dropTarget);
                 }
-
-                dropTarget.onDragMove(avatar, event);
             }
 
             return false;
@@ -136,11 +138,14 @@ var DnDProvider = function (_Component) {
                     dropTarget.onDragEnd(avatar, event);
 
                     if (typeof onDragEnd === 'function') {
+                        var draggableId = (0, _utils.getDraggableId)(dragZone.draggable);
+
                         if (dropTarget.droppable) {
-                            var draggableId = dragZone.draggable.closest('.draggable').dataset.draggableId;
-                            var droppableId = dropTarget.droppable.closest('.droppable').dataset.droppableId;
+                            var droppableId = (0, _utils.getDroppableId)(dropTarget.droppable);
 
                             onDragEnd(event, draggableId, droppableId);
+                        } else {
+                            onDragEnd(event, draggableId, null);
                         }
                     }
                 } else {

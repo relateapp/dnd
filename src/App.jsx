@@ -5,9 +5,8 @@ import DnDProvider from './components/DnDProvider';
 
 const App = () => {
     const onDragEnd = (event, draggableId, droppableId) => {
-        // console.log('event ->', event);
-        // console.log('draggableId ->', draggableId);
-        // console.log('droppableId ->', droppableId);
+        console.log('draggableId ->', draggableId);
+        console.log('droppableId ->', droppableId);
     };
 
     const onDragMove = (event, draggable, droppable) => {
@@ -22,9 +21,9 @@ const App = () => {
     return (
         <div id="app">
             <DnDProvider
-                onDragStart={onDragStart}
+                // onDragStart={onDragStart}
                 onDragEnd={onDragEnd}
-                onDragMove={onDragMove}
+                // onDragMove={onDragMove}
             >
                 <NodeRenderContainer node={mockData}/>
             </DnDProvider>

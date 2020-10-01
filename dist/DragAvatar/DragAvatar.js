@@ -84,9 +84,9 @@ var DragAvatar = function (_Component) {
 
             // инициировать начало переноса
             document.body.appendChild(elem);
-            // elem.style.zIndex = 9999;
-            // elem.style.position = 'absolute';
-            elem.style.display = 'none';
+            elem.style.zIndex = 9999;
+            elem.style.position = 'absolute';
+            // elem.style.display = 'none';
 
             return true;
         }
