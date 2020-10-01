@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { getDraggableId, getDroppableId } from '../utils';
+import getDraggableId from '../utils/getDraggableId';
+import getDroppableId from '../utils/getDroppableId';
 
 class DnDProvider extends Component {
 

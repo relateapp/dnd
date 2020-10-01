@@ -14,7 +14,13 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _utils = require('../utils');
+var _getDraggableId = require('../utils/getDraggableId');
+
+var _getDraggableId2 = _interopRequireDefault(_getDraggableId);
+
+var _getDroppableId = require('../utils/getDroppableId');
+
+var _getDroppableId2 = _interopRequireDefault(_getDroppableId);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -138,10 +144,10 @@ var DnDProvider = function (_Component) {
                     dropTarget.onDragEnd(avatar, event);
 
                     if (typeof onDragEnd === 'function') {
-                        var draggableId = (0, _utils.getDraggableId)(dragZone.draggable);
+                        var draggableId = (0, _getDraggableId2.default)(dragZone.draggable);
 
                         if (dropTarget.droppable) {
-                            var droppableId = (0, _utils.getDroppableId)(dropTarget.droppable);
+                            var droppableId = (0, _getDroppableId2.default)(dropTarget.droppable);
 
                             onDragEnd(event, draggableId, droppableId);
                         } else {
