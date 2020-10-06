@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import getDraggableId from '../utils/getDraggableId';
-import getDroppableId from '../utils/getDroppableId';
 
 class DnDProvider extends Component {
 
@@ -128,19 +126,8 @@ class DnDProvider extends Component {
             if (dropTarget) {
                 // завершить перенос и избавиться от аватара, если это нужно
                 // эта функция обязана вызвать avatar.onDragEnd/onDragCancel
-                dropTarget.onDragEnd(avatar, event);
-
-                if (typeof onDragEnd === 'function') {
-                    const draggableId = getDraggableId(dragZone.draggable);
-
-                    if (dropTarget.droppable) {
-                        const droppableId = getDroppableId(dropTarget.droppable);
-
-                        onDragEnd(event, draggableId, droppableId);
-                    } else {
-                        onDragEnd(event, draggableId, null);
-                    }
-                }
+                // TODO use another approach
+                dropTarget.onDragEnd(avatar, event, onDragEnd);
             } else {
                 avatar.onDragCancel();
             }

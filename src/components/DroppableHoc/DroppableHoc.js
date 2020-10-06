@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { getDraggableId, getDroppableId } from '../utils';
+
 function DroppableHoc (Component) {
     class Droppable extends React.Component {
         constructor (props) {
@@ -17,7 +19,7 @@ function DroppableHoc (Component) {
         initDropTarget () {
             if (this.droppable) {
                 this.droppable.dropTarget = this;
-                this._targetElem = null;
+                this.targetElement = null;
             }
         };
 
@@ -48,13 +50,13 @@ function DroppableHoc (Component) {
 
         /**
          * Спрятать индикацию переноса
-         * Вызывается, когда аватар уходит с текущего this._targetElem
+         * Вызывается, когда аватар уходит с текущего this.targetElement
          */
         _hideHoverIndication (avatar) {
         };
         /**
          * Показать индикацию переноса
-         * Вызывается, когда аватар пришел на новый this._targetElem
+         * Вызывается, когда аватар пришел на новый this.targetElement
          */
         _showHoverIndication (avatar) {
         };
@@ -65,11 +67,11 @@ function DroppableHoc (Component) {
         onDragMove (avatar, event) {
             let newTargetElem = this._getTargetElem(avatar, event);
 
-            if (this._targetElem !== newTargetElem) {
+            if (this.targetElement !== newTargetElem) {
                 this._hideHoverIndication(avatar);
                 // override element reference
                 this.droppable = newTargetElem;
-                this._targetElem = newTargetElem;
+                this.targetElement = newTargetElem;
                 this._showHoverIndication(avatar);
             }
         };
@@ -78,7 +80,7 @@ function DroppableHoc (Component) {
          * Завершение переноса.
          * Алгоритм обработки (переопределить функцию и написать в потомке):
          * 1. Получить данные переноса из avatar.getDragInfo()
-         * 2. Определить, возможен ли перенос на _targetElem (если он есть)
+         * 2. Определить, возможен ли перенос на targetElement (если он есть)
          * 3. Вызвать avatar.onDragEnd() или avatar.onDragCancel()
          *  Если нужно подтвердить перенос запросом на сервер, то avatar.onDragEnd(),
          *  а затем асинхронно, если сервер вернул ошибку, avatar.onDragCancel()
@@ -86,23 +88,29 @@ function DroppableHoc (Component) {
          *
          * При любом завершении этого метода нужно (делается ниже):
          *  снять текущую индикацию переноса
-         *  обнулить this._targetElem
+         *  обнулить this.targetElement
          */
-        onDragEnd(avatar, event) {
-            if (!this._targetElem) {
+        onDragEnd(avatar, event, callback) {
+            // получить информацию об объекте переноса
+            const { dragZone } = avatar.getDragInfo(event);
+
+            const draggableId = getDraggableId(dragZone.draggable);
+
+            if (!this.targetElement) {
                 // перенос закончился вне подходящей точки приземления
                 avatar.onDragCancel();
+                // if drag is not successful droppableId equals null
+                callback(event, draggableId, null);
+            } else {
+                const droppableId = getDroppableId(this.targetElement);
 
-                return;
+                callback(event, draggableId, droppableId);
+                // аватар больше не нужен, перенос успешен
+                // удалить аватар
+                this._hideHoverIndication();
+                avatar.onDragEnd();
+                this.targetElement = null;
             }
-
-            this._hideHoverIndication();
-            // получить информацию об объекте переноса
-            // let avatarInfo = avatar.getDragInfo(event);
-
-            avatar.onDragEnd(); // аватар больше не нужен, перенос успешен
-
-            this._targetElem = null;
         };
 
         /**
@@ -119,7 +127,7 @@ function DroppableHoc (Component) {
          */
         onDragLeave (toDropTarget, avatar, event) {
             this._hideHoverIndication();
-            this._targetElem = null;
+            this.targetElement = null;
         };
 
         setRef = el => {

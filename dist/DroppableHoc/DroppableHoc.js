@@ -12,6 +12,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _utils = require('../utils');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -52,7 +54,7 @@ function DroppableHoc(Component) {
             value: function initDropTarget() {
                 if (this.droppable) {
                     this.droppable.dropTarget = this;
-                    this._targetElem = null;
+                    this.targetElement = null;
                 }
             }
         }, {
@@ -89,7 +91,7 @@ function DroppableHoc(Component) {
 
             /**
              * Спрятать индикацию переноса
-             * Вызывается, когда аватар уходит с текущего this._targetElem
+             * Вызывается, когда аватар уходит с текущего this.targetElement
              */
             value: function _hideHoverIndication(avatar) {}
         }, {
@@ -97,7 +99,7 @@ function DroppableHoc(Component) {
 
             /**
              * Показать индикацию переноса
-             * Вызывается, когда аватар пришел на новый this._targetElem
+             * Вызывается, когда аватар пришел на новый this.targetElement
              */
             value: function _showHoverIndication(avatar) {}
         }, {
@@ -110,11 +112,11 @@ function DroppableHoc(Component) {
             value: function onDragMove(avatar, event) {
                 var newTargetElem = this._getTargetElem(avatar, event);
 
-                if (this._targetElem !== newTargetElem) {
+                if (this.targetElement !== newTargetElem) {
                     this._hideHoverIndication(avatar);
                     // override element reference
                     this.droppable = newTargetElem;
-                    this._targetElem = newTargetElem;
+                    this.targetElement = newTargetElem;
                     this._showHoverIndication(avatar);
                 }
             }
@@ -126,7 +128,7 @@ function DroppableHoc(Component) {
              * Завершение переноса.
              * Алгоритм обработки (переопределить функцию и написать в потомке):
              * 1. Получить данные переноса из avatar.getDragInfo()
-             * 2. Определить, возможен ли перенос на _targetElem (если он есть)
+             * 2. Определить, возможен ли перенос на targetElement (если он есть)
              * 3. Вызвать avatar.onDragEnd() или avatar.onDragCancel()
              *  Если нужно подтвердить перенос запросом на сервер, то avatar.onDragEnd(),
              *  а затем асинхронно, если сервер вернул ошибку, avatar.onDragCancel()
@@ -134,23 +136,30 @@ function DroppableHoc(Component) {
              *
              * При любом завершении этого метода нужно (делается ниже):
              *  снять текущую индикацию переноса
-             *  обнулить this._targetElem
+             *  обнулить this.targetElement
              */
-            value: function onDragEnd(avatar, event) {
-                if (!this._targetElem) {
+            value: function onDragEnd(avatar, event, callback) {
+                // получить информацию об объекте переноса
+                var _avatar$getDragInfo = avatar.getDragInfo(event),
+                    dragZone = _avatar$getDragInfo.dragZone;
+
+                var draggableId = (0, _utils.getDraggableId)(dragZone.draggable);
+
+                if (!this.targetElement) {
                     // перенос закончился вне подходящей точки приземления
                     avatar.onDragCancel();
+                    // if drag is not successful droppableId equals null
+                    callback(event, draggableId, null);
+                } else {
+                    var droppableId = (0, _utils.getDroppableId)(this.targetElement);
 
-                    return;
+                    callback(event, draggableId, droppableId);
+                    // аватар больше не нужен, перенос успешен
+                    // удалить аватар
+                    this._hideHoverIndication();
+                    avatar.onDragEnd();
+                    this.targetElement = null;
                 }
-
-                this._hideHoverIndication();
-                // получить информацию об объекте переноса
-                // let avatarInfo = avatar.getDragInfo(event);
-
-                avatar.onDragEnd(); // аватар больше не нужен, перенос успешен
-
-                this._targetElem = null;
             }
         }, {
             key: 'onDragEnter',
@@ -173,7 +182,7 @@ function DroppableHoc(Component) {
              */
             value: function onDragLeave(toDropTarget, avatar, event) {
                 this._hideHoverIndication();
-                this._targetElem = null;
+                this.targetElement = null;
             }
         }, {
             key: 'render',

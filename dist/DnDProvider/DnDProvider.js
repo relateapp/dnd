@@ -14,14 +14,6 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _getDraggableId = require('../utils/getDraggableId');
-
-var _getDraggableId2 = _interopRequireDefault(_getDraggableId);
-
-var _getDroppableId = require('../utils/getDroppableId');
-
-var _getDroppableId2 = _interopRequireDefault(_getDroppableId);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -141,19 +133,8 @@ var DnDProvider = function (_Component) {
                 if (dropTarget) {
                     // завершить перенос и избавиться от аватара, если это нужно
                     // эта функция обязана вызвать avatar.onDragEnd/onDragCancel
-                    dropTarget.onDragEnd(avatar, event);
-
-                    if (typeof onDragEnd === 'function') {
-                        var draggableId = (0, _getDraggableId2.default)(dragZone.draggable);
-
-                        if (dropTarget.droppable) {
-                            var droppableId = (0, _getDroppableId2.default)(dropTarget.droppable);
-
-                            onDragEnd(event, draggableId, droppableId);
-                        } else {
-                            onDragEnd(event, draggableId, null);
-                        }
-                    }
+                    // TODO use another approach
+                    dropTarget.onDragEnd(avatar, event, onDragEnd);
                 } else {
                     avatar.onDragCancel();
                 }
