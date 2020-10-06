@@ -1,4 +1,11 @@
-export { default as getElementUnderClientXY } from './getElementUnderClientXY';
-export { default as getDraggableId } from './getDraggableId';
-export { default as getDroppableId } from './getDroppableId';
-export { default as getCoords } from './getCoords';
+import getElementUnderClientXY from './getElementUnderClientXY';
+import getDroppableId from './getDroppableId';
+import getDraggableId from './getDraggableId';
+import getCoords from './getCoords';
+
+export {
+    getElementUnderClientXY,
+    getDroppableId,
+    getDraggableId,
+    getCoords
+};

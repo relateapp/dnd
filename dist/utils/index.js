@@ -1,43 +1,29 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
+exports.getCoords = exports.getDraggableId = exports.getDroppableId = exports.getElementUnderClientXY = undefined;
 
 var _getElementUnderClientXY = require('./getElementUnderClientXY');
 
-Object.defineProperty(exports, 'getElementUnderClientXY', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_getElementUnderClientXY).default;
-  }
-});
-
-var _getDraggableId = require('./getDraggableId');
-
-Object.defineProperty(exports, 'getDraggableId', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_getDraggableId).default;
-  }
-});
+var _getElementUnderClientXY2 = _interopRequireDefault(_getElementUnderClientXY);
 
 var _getDroppableId = require('./getDroppableId');
 
-Object.defineProperty(exports, 'getDroppableId', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_getDroppableId).default;
-  }
-});
+var _getDroppableId2 = _interopRequireDefault(_getDroppableId);
+
+var _getDraggableId = require('./getDraggableId');
+
+var _getDraggableId2 = _interopRequireDefault(_getDraggableId);
 
 var _getCoords = require('./getCoords');
 
-Object.defineProperty(exports, 'getCoords', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_getCoords).default;
-  }
-});
+var _getCoords2 = _interopRequireDefault(_getCoords);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.getElementUnderClientXY = _getElementUnderClientXY2.default;
+exports.getDroppableId = _getDroppableId2.default;
+exports.getDraggableId = _getDraggableId2.default;
+exports.getCoords = _getCoords2.default;
