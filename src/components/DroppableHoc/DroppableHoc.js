@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { getDraggableId, getDroppableId } from '../utils';
+import getDraggableId from '../utils/getDraggableId';
+import getDroppableId from '../utils/getDroppableId';
 
 function DroppableHoc (Component) {
     class Droppable extends React.Component {

@@ -12,7 +12,13 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _utils = require('../utils');
+var _getDraggableId = require('../utils/getDraggableId');
+
+var _getDraggableId2 = _interopRequireDefault(_getDraggableId);
+
+var _getDroppableId = require('../utils/getDroppableId');
+
+var _getDroppableId2 = _interopRequireDefault(_getDroppableId);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -143,7 +149,7 @@ function DroppableHoc(Component) {
                 var _avatar$getDragInfo = avatar.getDragInfo(event),
                     dragZone = _avatar$getDragInfo.dragZone;
 
-                var draggableId = (0, _utils.getDraggableId)(dragZone.draggable);
+                var draggableId = (0, _getDraggableId2.default)(dragZone.draggable);
 
                 if (!this.targetElement) {
                     // перенос закончился вне подходящей точки приземления
@@ -151,7 +157,7 @@ function DroppableHoc(Component) {
                     // if drag is not successful droppableId equals null
                     callback(event, draggableId, null);
                 } else {
-                    var droppableId = (0, _utils.getDroppableId)(this.targetElement);
+                    var droppableId = (0, _getDroppableId2.default)(this.targetElement);
 
                     callback(event, draggableId, droppableId);
                     // аватар больше не нужен, перенос успешен
