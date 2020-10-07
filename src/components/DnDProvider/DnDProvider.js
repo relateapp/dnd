@@ -70,17 +70,16 @@ class DnDProvider extends Component {
             // попробовать захватить элемент
             avatar = dragZone.onDragStart(downX, downY, event);
 
-            if (avatar) {
+            if (!avatar) {
+                // не получилось, значит перенос продолжать нельзя
+                this.cleanUp(); // очистить приватные переменные, связанные с переносом
+            } else {
                 if (typeof onDragStart === 'function') {
                     onDragStart(event);
                 }
-                this.setState({avatar});
-            } else {
-                // не получилось, значит перенос продолжать нельзя
-                this.cleanUp(); // очистить приватные переменные, связанные с переносом
-            }
 
-            return this;
+                this.setState({avatar});
+            }
         }
 
         // отобразить перенос объекта, перевычислить текущий элемент под курсором
