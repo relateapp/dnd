@@ -100,6 +100,7 @@ var DnDProvider = function (_Component) {
                 newDropTarget && newDropTarget.onDragEnter(dropTarget, avatar, event);
             }
 
+            _this.setState({ dropTarget: newDropTarget });
             // dropTarget = newDropTarget;
             // TODO optimize this function
             if (dropTarget) {
@@ -108,8 +109,6 @@ var DnDProvider = function (_Component) {
                 if (typeof onDragMove === 'function') {
                     onDragMove(event, null, dropTarget);
                 }
-
-                _this.setState({ dropTarget: newDropTarget });
             }
 
             return false;

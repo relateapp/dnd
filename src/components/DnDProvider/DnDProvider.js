@@ -97,6 +97,7 @@ class DnDProvider extends Component {
             newDropTarget && newDropTarget.onDragEnter(dropTarget, avatar, event);
         }
 
+        this.setState({dropTarget: newDropTarget});
         // dropTarget = newDropTarget;
         // TODO optimize this function
         if (dropTarget) {
@@ -105,8 +106,6 @@ class DnDProvider extends Component {
             if (typeof onDragMove === 'function') {
                 onDragMove(event, null, dropTarget);
             }
-
-            this.setState({dropTarget: newDropTarget});
         }
 
         return false;
