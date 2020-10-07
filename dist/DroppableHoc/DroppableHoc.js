@@ -80,12 +80,15 @@ function DroppableHoc(Component) {
                 }
 
                 // проверить, может быть перенос узла внутрь самого себя или в себя?
-                var elemToMove = avatar.getDragInfo(event).dragZoneElem.parentNode;
+                var elemToMove = avatar.getDragInfo(event).dragZoneElem.closest('.draggable').parentNode;
 
                 var elem = target;
 
+                // попытка перенести родителя в потомка
+                // отметить попытку переноса
                 while (elem) {
-                    if (elem === elemToMove) return; // попытка перенести родителя в потомка
+                    if (elem === elemToMove) return;
+
                     elem = elem.parentNode;
                 }
 
@@ -160,12 +163,13 @@ function DroppableHoc(Component) {
                     var droppableId = (0, _getDroppableId2.default)(this.targetElement);
 
                     callback(event, draggableId, droppableId);
-                    // аватар больше не нужен, перенос успешен
-                    // удалить аватар
-                    this._hideHoverIndication();
-                    avatar.onDragEnd();
-                    this.targetElement = null;
                 }
+
+                // аватар больше не нужен, перенос успешен
+                // удалить аватар
+                this._hideHoverIndication();
+                avatar.onDragEnd();
+                this.targetElement = null;
             }
         }, {
             key: 'onDragEnter',

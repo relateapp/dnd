@@ -42,14 +42,14 @@ function DraggableHoc(Component) {
          * @param downY Координата изначального нажатия по Y
          * @param event текущее событие мыши
          *
-         * @return аватар или false, если захватить с данной точки ничего нельзя
+         * @return аватар или null, если захватить с данной точки ничего нельзя
          */
         onDragStart(downX, downY, event) {
 
-            let avatar = this._makeAvatar();
+            const avatar = this._makeAvatar();
 
             if (!avatar.initFromEvent(downX, downY, event)) {
-                return false;
+                return null;
             }
 
             return avatar;

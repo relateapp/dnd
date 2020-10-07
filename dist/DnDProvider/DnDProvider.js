@@ -70,18 +70,17 @@ var DnDProvider = function (_Component) {
                 if (Math.abs(event.pageX - downX) < 3 && Math.abs(event.pageY - downY) < 3) {
                     return;
                 }
-
-                if (typeof onDragStart === 'function') {
-                    onDragStart(event);
-                }
                 // попробовать захватить элемент
                 avatar = dragZone.onDragStart(downX, downY, event);
 
-                if (!avatar) {
+                if (avatar) {
+                    if (typeof onDragStart === 'function') {
+                        onDragStart(event);
+                    }
+                    _this.setState({ avatar: avatar });
+                } else {
                     // не получилось, значит перенос продолжать нельзя
                     _this.cleanUp(); // очистить приватные переменные, связанные с переносом
-                } else {
-                    _this.setState({ avatar: avatar });
                 }
 
                 return _this;
@@ -102,7 +101,6 @@ var DnDProvider = function (_Component) {
             }
 
             // dropTarget = newDropTarget;
-            _this.setState({ dropTarget: newDropTarget });
             // TODO optimize this function
             if (dropTarget) {
                 dropTarget.onDragMove(avatar, event);
@@ -110,6 +108,8 @@ var DnDProvider = function (_Component) {
                 if (typeof onDragMove === 'function') {
                     onDragMove(event, null, dropTarget);
                 }
+
+                _this.setState({ dropTarget: newDropTarget });
             }
 
             return false;

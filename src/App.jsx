@@ -1,6 +1,6 @@
 import React from 'react';
 import mockData from './mockData';
-import NodeRenderContainer from './NodeRenderContainer';
+import Node from './Node';
 import DnDProvider from './components/DnDProvider';
 
 const App = () => {
@@ -25,7 +25,8 @@ const App = () => {
                 onDragEnd={onDragEnd}
                 // onDragMove={onDragMove}
             >
-                <NodeRenderContainer node={mockData}/>
+                <Node/>
+                {/*<NodeRenderContainer node={mockData}/>*/}
             </DnDProvider>
         </div>
     );

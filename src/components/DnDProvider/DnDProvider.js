@@ -67,18 +67,17 @@ class DnDProvider extends Component {
             ) {
                 return;
             }
-
-            if (typeof onDragStart === 'function') {
-                onDragStart(event);
-            }
             // попробовать захватить элемент
             avatar = dragZone.onDragStart(downX, downY, event);
 
-            if (!avatar) {
+            if (avatar) {
+                if (typeof onDragStart === 'function') {
+                    onDragStart(event);
+                }
+                this.setState({avatar});
+            } else {
                 // не получилось, значит перенос продолжать нельзя
                 this.cleanUp(); // очистить приватные переменные, связанные с переносом
-            } else {
-                this.setState({avatar});
             }
 
             return this;
@@ -99,7 +98,6 @@ class DnDProvider extends Component {
         }
 
         // dropTarget = newDropTarget;
-        this.setState({dropTarget: newDropTarget});
         // TODO optimize this function
         if (dropTarget) {
             dropTarget.onDragMove(avatar, event);
@@ -107,6 +105,8 @@ class DnDProvider extends Component {
             if (typeof onDragMove === 'function') {
                 onDragMove(event, null, dropTarget);
             }
+
+            this.setState({dropTarget: newDropTarget});
         }
 
         return false;

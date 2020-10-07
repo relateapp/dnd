@@ -30,19 +30,26 @@ function DroppableHoc (Component) {
          * @return DOM-элемент, на который можно положить или undefined
          */
         _getTargetElem (avatar, event) {
-            let target = avatar.getTargetElem();
+            const target = avatar.getTargetElem();
 
             if (!target.closest('.droppable')) {
                 return;
             }
 
             // проверить, может быть перенос узла внутрь самого себя или в себя?
-            let elemToMove = avatar.getDragInfo(event).dragZoneElem.parentNode;
+            const elemToMove = avatar
+                .getDragInfo(event)
+                .dragZoneElem
+                .closest('.draggable')
+                .parentNode;
 
             let elem = target;
 
+            // попытка перенести родителя в потомка
+            // отметить попытку переноса
             while (elem) {
-                if (elem === elemToMove) return; // попытка перенести родителя в потомка
+                if (elem === elemToMove) return;
+
                 elem = elem.parentNode;
             }
 
@@ -106,12 +113,13 @@ function DroppableHoc (Component) {
                 const droppableId = getDroppableId(this.targetElement);
 
                 callback(event, draggableId, droppableId);
-                // аватар больше не нужен, перенос успешен
-                // удалить аватар
-                this._hideHoverIndication();
-                avatar.onDragEnd();
-                this.targetElement = null;
             }
+
+            // аватар больше не нужен, перенос успешен
+            // удалить аватар
+            this._hideHoverIndication();
+            avatar.onDragEnd();
+            this.targetElement = null;
         };
 
         /**
