@@ -159,6 +159,11 @@ function DroppableHoc(Component) {
                     avatar.onDragCancel();
                     // if drag is not successful droppableId equals null
                     callback(event, draggableId, null);
+
+                    // TODO optimize this approach
+                    // stop function execution here
+                    // IMPORTANT don't delete this statement
+                    return;
                 } else {
                     var droppableId = (0, _getDroppableId2.default)(this.targetElement);
 
