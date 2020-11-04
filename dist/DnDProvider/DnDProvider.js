@@ -30,31 +30,36 @@ var DnDProvider = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (DnDProvider.__proto__ || Object.getPrototypeOf(DnDProvider)).call(this, props));
 
-        _this.onMouseDown = function (e) {
-            if (e.which !== 1) {
+        _this.onMouseDown = function (event) {
+            if (event.which !== 1) {
                 // не левой кнопкой
                 return;
             }
 
-            var dragZone = _this.findDragZone(e);
+            var dragZone = _this.findDragZone(event);
 
             if (!dragZone) {
                 return;
             } else {
+                var onDragStart = _this.props.onDragStart;
+
+
+                if (typeof onDragStart === 'function') {
+                    onDragStart(event);
+                }
+
                 _this.setState({ dragZone: dragZone });
             }
 
             // запомним, что элемент нажат на текущих координатах pageX/pageY
             _this.setState({
-                downX: e.pageX,
-                downY: e.pageY
+                downX: event.pageX,
+                downY: event.pageY
             });
         };
 
         _this.onMouseMove = function (event) {
-            var _this$props = _this.props,
-                onDragMove = _this$props.onDragMove,
-                onDragStart = _this$props.onDragStart;
+            var onDragMove = _this.props.onDragMove;
             var _this$state = _this.state,
                 dragZone = _this$state.dragZone,
                 downX = _this$state.downX,
@@ -77,10 +82,6 @@ var DnDProvider = function (_Component) {
                     // не получилось, значит перенос продолжать нельзя
                     _this.cleanUp(); // очистить приватные переменные, связанные с переносом
                 } else {
-                    if (typeof onDragStart === 'function') {
-                        onDragStart(event);
-                    }
-
                     _this.setState({ avatar: avatar });
                 }
             }

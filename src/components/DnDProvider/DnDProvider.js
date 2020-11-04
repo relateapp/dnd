@@ -32,29 +32,35 @@ class DnDProvider extends Component {
         document.removeEventListener('mousedown', this.onMouseDown);
     }
 
-    onMouseDown = (e) => {
-        if (e.which !== 1) {
+    onMouseDown = event => {
+        if (event.which !== 1) {
             // не левой кнопкой
             return;
         }
 
-        const dragZone = this.findDragZone(e);
+        const dragZone = this.findDragZone(event);
 
         if (!dragZone) {
             return;
         } else {
+            const { onDragStart } = this.props;
+
+            if (typeof onDragStart === 'function') {
+                onDragStart(event);
+            }
+
             this.setState({dragZone});
         }
 
         // запомним, что элемент нажат на текущих координатах pageX/pageY
         this.setState({
-            downX: e.pageX,
-            downY: e.pageY
+            downX: event.pageX,
+            downY: event.pageY
         });
     }
 
     onMouseMove = event => {
-        const { onDragMove, onDragStart } = this.props;
+        const { onDragMove } = this.props;
         let {dragZone, downX, downY, avatar, dropTarget} = this.state;
 
         if (!dragZone) return; // элемент не зажат
@@ -74,10 +80,6 @@ class DnDProvider extends Component {
                 // не получилось, значит перенос продолжать нельзя
                 this.cleanUp(); // очистить приватные переменные, связанные с переносом
             } else {
-                if (typeof onDragStart === 'function') {
-                    onDragStart(event);
-                }
-
                 this.setState({avatar});
             }
         }
