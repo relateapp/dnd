@@ -41,13 +41,6 @@ var DnDProvider = function (_Component) {
             if (!dragZone) {
                 return;
             } else {
-                var onDragStart = _this.props.onDragStart;
-
-
-                if (typeof onDragStart === 'function') {
-                    onDragStart(event);
-                }
-
                 _this.setState({ dragZone: dragZone });
             }
 
@@ -59,7 +52,9 @@ var DnDProvider = function (_Component) {
         };
 
         _this.onMouseMove = function (event) {
-            var onDragMove = _this.props.onDragMove;
+            var _this$props = _this.props,
+                onDragMove = _this$props.onDragMove,
+                onDragStart = _this$props.onDragStart;
             var _this$state = _this.state,
                 dragZone = _this$state.dragZone,
                 downX = _this$state.downX,
@@ -74,6 +69,10 @@ var DnDProvider = function (_Component) {
                 // элемент нажат, но пока не начали его двигать
                 if (Math.abs(event.pageX - downX) < 3 && Math.abs(event.pageY - downY) < 3) {
                     return;
+                }
+
+                if (typeof onDragStart === 'function') {
+                    onDragStart(event);
                 }
                 // попробовать захватить элемент
                 avatar = dragZone.onDragStart(downX, downY, event);

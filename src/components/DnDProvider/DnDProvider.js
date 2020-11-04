@@ -43,12 +43,6 @@ class DnDProvider extends Component {
         if (!dragZone) {
             return;
         } else {
-            const { onDragStart } = this.props;
-
-            if (typeof onDragStart === 'function') {
-                onDragStart(event);
-            }
-
             this.setState({dragZone});
         }
 
@@ -60,7 +54,7 @@ class DnDProvider extends Component {
     }
 
     onMouseMove = event => {
-        const { onDragMove } = this.props;
+        const { onDragMove, onDragStart } = this.props;
         let {dragZone, downX, downY, avatar, dropTarget} = this.state;
 
         if (!dragZone) return; // элемент не зажат
@@ -72,6 +66,10 @@ class DnDProvider extends Component {
                 && Math.abs(event.pageY - downY) < 3
             ) {
                 return;
+            }
+
+            if (typeof onDragStart === 'function') {
+                onDragStart(event);
             }
             // попробовать захватить элемент
             avatar = dragZone.onDragStart(downX, downY, event);
