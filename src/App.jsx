@@ -25,7 +25,7 @@ const App = () => {
                 onDragEnd={onDragEnd}
                 // onDragMove={onDragMove}
             >
-                <Node/>
+                {/*<Node/>*/}
                 {/*<NodeRenderContainer node={mockData}/>*/}
             </DnDProvider>
         </div>
