@@ -121,7 +121,6 @@ class DnDProvider extends Component {
 
         if (avatar) {
             // если уже начали передвигать
-            console.log(dropTarget);
             if (dropTarget) {
                 // завершить перенос и избавиться от аватара, если это нужно
                 // эта функция обязана вызвать avatar.onDragEnd/onDragCancel
